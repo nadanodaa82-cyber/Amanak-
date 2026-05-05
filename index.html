@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amanak Platform | منصة أمانك 🤝</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* اللون الموف الصريح المطلوب */
+            --main-purple: #7c3aed; 
+            --deep-purple: #5b21b6;
+            --pink-accent: #db2777;
+            --grad: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+            --light-bg: #f5f3ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
+        body { background-color: #fcfaff; color: #1e1b4b; }
+
+        /* شاشة الدخول */
+        #login-screen {
+            position: fixed; inset: 0; background: var(--light-bg); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .login-card {
+            width: 100%; max-width: 450px; padding: 50px; text-align: center;
+            background: white; border-radius: 40px; box-shadow: 0 25px 60px rgba(124, 58, 237, 0.15);
+            border: 2px solid white;
+        }
+
+        /* الهيكل الرئيسي */
+        #main-app { display: none; min-height: 100vh; flex-direction: column; }
+
+        /* الهيدر */
+        header {
+            background: white; padding: 15px 6%; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 100;
+        }
+        .brand { font-size: 30px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-links { display: flex; gap: 12px; background: #f5f3ff; padding: 6px; border-radius: 20px; }
+        .nav-links button {
+            background: transparent; border: none; padding: 10px 20px; border-radius: 15px;
+            cursor: pointer; font-weight: 800; color: #6d28d9; font-size: 14px;
+        }
+        .nav-links button.active { background: var(--main-purple); color: white; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
+
+        /* المحتوى */
+        main { padding: 40px 6%; flex: 1; }
+        .page { display: none; animation: fadeIn 0.6s ease; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* كروت الإحصائيات (الضخامة) */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-box { background: white; padding: 25px; border-radius: 30px; border-bottom: 5px solid var(--main-purple); text-align: center; }
+        .stat-box h3 { font-size: 28px; color: var(--main-purple); margin-bottom: 5px; }
+
+        /* الكروت */
+        .grid-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .card { background: white; padding: 35px; border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.02); border: 1px solid #eee; position: relative; overflow: hidden; }
+        .card i { font-size: 40px; color: var(--main-purple); margin-bottom: 20px; display: block; }
+
+        .btn-action {
+            background: var(--grad); color: white; border: none; width: 100%;
+            padding: 16px; border-radius: 18px; font-weight: 900; cursor: pointer; margin-top: 15px;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.2);
+        }
+        .btn-action:hover { transform: scale(1.02); }
+
+        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 15px; border: 2px solid #f3f4f6; background: #f9fafb; outline: none; }
+        input:focus { border-color: var(--main-purple); background: white; }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; border-top: 1px solid #f1f1f1; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <img src="1000643421.jpg" style="width: 140px; margin-bottom: 20px;" onerror="this.src='https://via.placeholder.com/140?text=AMANAK'">
+            <h1 style="color: var(--deep-purple); font-weight: 900; margin-bottom: 10px;">تسجيل الدخول</h1>
+            <p style="color: #6b7280; margin-bottom: 30px;">مرحباً بكِ في "أمانك" 🤝</p>
+            <input type="text" placeholder="الرقم الجامعي / البريد">
+            <input type="password" placeholder="كلمة المرور">
+            <button class="btn-action" onclick="document.getElementById('login-screen').style.display='none'; document.getElementById('main-app').style.display='flex';">دخول للمنصة 🤝</button>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <header>
+            <div class="brand">Amanak 🤝</div>
+            <nav class="nav-links">
+                <button onclick="changeTab('home', this)" class="active"><i class="fas fa-home"></i> الرئيسية</button>
+                <button onclick="changeTab('booking', this)"><i class="fas fa-calendar-alt"></i> الاستشارات</button>
+                <button onclick="changeTab('tests', this)"><i class="fas fa-file-medical-alt"></i> الاختبارات</button>
+                <button onclick="changeTab('courses', this)"><i class="fas fa-video"></i> الدورات</button>
+            </nav>
+            <button onclick="location.reload()" style="color:#ef4444; background:none; border:none; cursor:pointer; font-weight:900;">خروج</button>
+        </header>
+
+        <main>
+            <div id="home" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-box"><h3>+250</h3><p>مستشار معتمد</p></div>
+                    <div class="stat-box"><h3>15,000</h3><p>جلسة مكتملة</p></div>
+                    <div class="stat-box"><h3>98%</h3><p>نسبة الرضا</p></div>
+                </div>
+                
+                <h2 style="margin-bottom:30px; font-weight: 900; color: var(--deep-purple);">الخدمات المركزية 🤝</h2>
+                <div class="grid-main">
+                    <div class="card">
+                        <i class="fas fa-brain"></i>
+                        <h3>مركز الدعم النفسي</h3>
+                        <p style="color:#64748b; margin-bottom:15px;">نوفر لكِ مساحة خاصة وآمنة للتحدث مع خبراء في الصحة النفسية وتجاوز كافة العقبات.</p>
+                        <button class="btn-action" onclick="changeTab('booking')">حجز جلسة فورية</button>
+                    </div>
+                    <div class="card" style="border-top: 5px solid var(--pink-accent);">
+                        <i class="fas fa-graduation-cap" style="color: var(--pink-accent);"></i>
+                        <h3>التوجيه الأكاديمي</h3>
+                        <p style="color:#64748b; margin-bottom:15px;">استشارات تربوية متخصصة لمساعدتكِ في تنظيم الوقت وتطوير مهارات التعلم الذاتي.</p>
+                        <button class="btn-action" style="background: var(--pink-accent);" onclick="changeTab('booking')">استشيري خبيراً</button>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-heart"></i>
+                        <h3>الذكاء الاجتماعي</h3>
+                        <p style="color:#64748b; margin-bottom:15px;">برامج لتطوير الشخصية القيادية والتعامل مع الضغوط الاجتماعية والبيئة الجامعية.</p>
+                        <button class="btn-action" onclick="changeTab('booking')">انضمي الآن</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="booking" class="page">
+                <div style="max-width: 800px; margin: 0 auto; background: white; padding: 50px; border-radius: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.05);">
+                    <h2 style="text-align:center; color: var(--deep-purple); margin-bottom:30px;">طلب استشارة متخصصة</h2>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div><label>نوع العيادة</label><select><option>النفسية</option><option>التربوية</option><option>الاجتماعية</option></select></div>
+                        <div><label>اسم المستشار</label><select><option>د. مريم الصالح</option><option>د. خالد العتيبي</option><option>أ. نورة الحربي</option></select></div>
+                    </div>
+                    <label style="margin-top:20px; display:block;">تاريخ الموعد المفضل</label>
+                    <input type="datetime-local">
+                    <label style="margin-top:20px; display:block;">تفاصيل الحالة (اختياري)</label>
+                    <textarea style="height:120px;" placeholder="اكتبي ما تودين مشاركته بسرية تامة..."></textarea>
+                    <button class="btn-action" onclick="alert('تم استلام طلبك بنجاح 🤝 سيتم التواصل معكِ خلال 24 ساعة.')">تأكيد إرسال الطلب</button>
+                </div>
+            </div>
+
+            <div id="tests" class="page">
+                <h2 style="margin-bottom:30px;">المقاييس النفسية المعتمدة 📊</h2>
+                <div class="grid-main">
+                    <div class="card"><h3>مقياس التوتر (PSS)</h3><p>اختبار عالمي لتحديد مستوى الإجهاد النفسي.</p><button class="btn-action">بدء المقياس</button></div>
+                    <div class="card"><h3>اختبار أنماط الشخصية</h3><p>اكتشفي نقاط قوتك وكيفية تطويرها.</p><button class="btn-action">بدء الاختبار</button></div>
+                    <div class="card"><h3>مقياس الرهاب الاجتماعي</h3><p>تقييم مستوى التواصل مع الآخرين.</p><button class="btn-action">بدء التقييم</button></div>
+                </div>
+            </div>
+
+            <div id="courses" class="page">
+                <h2 style="margin-bottom:30px;">أحدث الدورات التدريبية 🎓</h2>
+                <div class="grid-main">
+                    <div class="card">
+                        <div style="height:150px; background:#eee; border-radius:20px; margin-bottom:15px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-play-circle"></i></div>
+                        <h3>فن مواجهة الجمهور</h3><button class="btn-action">مشاهدة الآن</button>
+                    </div>
+                    <div class="card">
+                        <div style="height:150px; background:#eee; border-radius:20px; margin-bottom:15px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-play-circle"></i></div>
+                        <h3>التفكير الإيجابي</h3><button class="btn-action">مشاهدة الآن</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <h3 style="color: var(--main-purple); margin-bottom:10px;">Amanak Platform 🤝</h3>
+            <p>مشروع تخرج - جامعة طيبة 2026 | جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <script>
+        // دالة التنقل المضمونة
+        function changeTab(tabId, btn) {
+            // إخفاء الصفحات
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.style.display = 'none');
+            
+            // إظهار الصفحة المطلوبة
+            const activePage = document.getElementById(tabId);
+            activePage.style.display = 'block';
+            
+            // تحديث الأزرار
+            if(btn) {
+                const navBtns = document.querySelectorAll('.nav-links button');
+                navBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
